@@ -8,3 +8,4 @@
 *.order
 *.symvers
 *.swp
+.*.swp
