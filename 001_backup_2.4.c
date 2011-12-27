@@ -1,15 +1,9 @@
-/*
- *
- *  for 2.6 module type
- */
 #include <linux/module.h>
-//#include <linux/config.h>
-#include <linux/init.h>
+#include <linux/kernel.h>
 #include <linux/skbuff.h>
 #include <linux/ip.h>                  /* For IP header */
 #include <linux/netfilter.h>
 #include <linux/netfilter_ipv4.h>
-MODULE_LICENSE("GPL");
 
 /* 用于注册我们的函数的数据结构 */
 static struct nf_hook_ops nfho;
@@ -18,7 +12,7 @@ static struct nf_hook_ops nfho;
 static unsigned char *drop_ip = "\x7f\x00\x00\x01";
 
 /* 注册的hook函数的实现 */
-static unsigned int hook_func(unsigned int hooknum,
+unsigned int hook_func(unsigned int hooknum,
 		struct sk_buff *skb,
 		const struct net_device *in,
 		const struct net_device *out,
@@ -45,7 +39,7 @@ static unsigned int hook_func(unsigned int hooknum,
 }
 
 	/* 初始化程序 */
-	static int packet_radar_init(void)
+	int init_module()
 	{
 		/* 填充我们的hook数据结构 */
 		nfho.hook     = hook_func;         /* 处理函数 */
@@ -60,10 +54,9 @@ static unsigned int hook_func(unsigned int hooknum,
 	}
 
 	/* 清除程序 */
-	static void packet_radar_exit(void)
+	void cleanup_module()
 	{
 		nf_unregister_hook(&nfho);
 	}
 
-module_init(packet_radar_init);
-module_exit(packet_radar_exit);
+
