@@ -14,7 +14,7 @@ http://nano-chicken.blogspot.tw/2010/03/linux-modules12-netfilter.html
 
 defalt:
 	apt-get install linux-headers-$(uname -r)
-	cp *choice*.c 001.c
+	cp  hook5_2.6_32.c/?.c  001.c
 	make
 
 use:
