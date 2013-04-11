@@ -7,7 +7,11 @@ This is a tool for watching the packet flow.
   When the packet go through the HOOK Point,
   this module will hand up and say "He passed me !!"
 
-  (Above statement is just a joke ... 
-   the screen will display something by prink())
+
+defalt:
+	cp choice.c 001.c
+	apt-get install linux-headers-$(uname -r)
+	make
+
 
 ===============README EOF==================
