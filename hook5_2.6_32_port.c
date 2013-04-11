@@ -20,7 +20,14 @@ inline void dumpIpHdr(const char *fn, const struct sk_buff *skb)
 
 	if(!strcmp(fn, "postrouting"))
 		printk(KERN_ALERT "---------------------------------\n");
-//	}		
+//	}
+
+	// ref: sort by ICMP	
+	//if(iph->protocol == IPPROTO_ICMP)
+	//{
+	//	printk(KERN_INFO"hook_icmp::icmp_srv: receive ICMP packet\n");
+	//	printk(KERN_INFO"src: ");
+	//}	
 }
 
 static unsigned int
