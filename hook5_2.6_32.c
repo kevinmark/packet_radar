@@ -1,6 +1,7 @@
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/ip.h>
+#include <linux/tcp.h>
 #include <linux/netfilter.h>
 #include <linux/netfilter_ipv4.h>
 
@@ -10,14 +11,23 @@ inline void dumpIpHdr(const char *fn, const struct sk_buff *skb)
 {
 	const struct iphdr *ip = ip_hdr(skb);
 
-	const struct tcphdr *tcp = ip_hdr(skb);
-	unsigned char *deny_port = “\x00\x50”;    // port：80
+	const struct tcphdr *tcp = tcp_hdr(skb);
+	unsigned char *target_port = "\x00\x50";    // port：80
 
-printk("%s, src_port:%p, dest_port:%p\n", fn, &tcp->source, &tcp->dest);
-		printk(KERN_ALERT "%s, saddr:%pI4, daddr:%pI4\n", fn, &ip->saddr, &ip->daddr);
+//	if( (tcp->source == *(unsigned short *)target_port)||(tcp->dest == *(unsigned short *)target_port) )
+//	{
+		printk(KERN_ALERT "%s, saddr:%pI4:%hu, daddr:%pI4:%hu\n", fn, &ip->saddr, ntohs(tcp->source), &ip->daddr, ntohs(tcp->dest));
 
 	if(!strcmp(fn, "postrouting"))
 		printk(KERN_ALERT "---------------------------------\n");
+//	}
+
+	// ref: sort by ICMP	
+	//if(iph->protocol == IPPROTO_ICMP)
+	//{
+	//	printk(KERN_INFO"hook_icmp::icmp_srv: receive ICMP packet\n");
+	//	printk(KERN_INFO"src: ");
+	//}	
 }
 
 static unsigned int
