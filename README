@@ -17,5 +17,8 @@ defalt:
 	cp *choice*.c 001.c
 	make
 
+use:
+	insmod 001.ko
+	rmmod 001.ko
 
 ===============README EOF==================
