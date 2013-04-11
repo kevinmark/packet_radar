@@ -1,16 +1,20 @@
 =============README EXAMPLE==============
 
+
 Welcome !
 This is a private project
 
 This is a tool for watching the packet flow.
   When the packet go through the HOOK Point,
-  this module will hand up and say "He passed me !!"
+  this module will hand up and say "It passed me !!"
+
+ref:
+http://nano-chicken.blogspot.tw/2010/03/linux-modules12-netfilter.html
 
 
 defalt:
-	cp choice.c 001.c
 	apt-get install linux-headers-$(uname -r)
+	cp *choice*.c 001.c
 	make
 
 
