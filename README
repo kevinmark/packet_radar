@@ -12,13 +12,20 @@ ref:
 http://nano-chicken.blogspot.tw/2010/03/linux-modules12-netfilter.html
 
 
-defalt:
+debian6:
 	apt-get install linux-headers-$(uname -r)
-	cp  hook5_2.6_32.c/?.c  001.c
+	cp  hook5_2.6_32.c  001.c
 	make
+
+mips:
+	cp  hook5_2.6_22.c  001.c
+	make ARCH=mips CROSS_COMPILE=mipsel-linux- \
+		KERNEL_DIR=/path/to/tomatoraf/release/src-rt/linux/linux-2.6
+	dmesg | less
 
 use:
 	insmod 001.ko
 	rmmod 001.ko
+
 
 ===============README EOF==================
