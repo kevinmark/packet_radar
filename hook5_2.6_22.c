@@ -12,16 +12,19 @@ inline void dumpIpHdr(const char *fn, const struct sk_buff *skb)
 	const struct iphdr *ip = ip_hdr(skb);
 
 	const struct tcphdr *tcp = tcp_hdr(skb);
-//	unsigned char *target_port = "\x00\x50";    // port：80
+	//unsigned char *target_port = "\x00\x50";    // port：80
 
-//	if( (tcp->source == *(unsigned short *)target_port)||(tcp->dest == *(unsigned short *)target_port) )
-//	{
-		printk(KERN_ALERT "%s, saddr:%pI4:%hu, daddr:%pI4:%hu\n", fn, &ip->saddr, ntohs(tcp->source), &ip->daddr, ntohs(tcp->dest));
+	//if( (tcp->source == *(unsigned short *)target_port)||(tcp->dest == *(unsigned short *)target_port) )
+	//{
+		printk(KERN_ALERT "%s, saddr:%u.%u.%u.%u:%hu, daddr:%u.%u.%u.%u:%hu\n", fn, NIPQUAD(ip->saddr), ntohs(tcp->source), NIPQUAD(ip->daddr), ntohs(tcp->dest));
 
 	if(!strcmp(fn, "postrouting"))
 		printk(KERN_ALERT "---------------------------------\n");
-//	}
+	//}
 
+	// ref:
+	//if (iph && iph->protocol && (iph->protocol == IPPROTO_TCP))
+	//
 	// ref: sort by ICMP	
 	//if(iph->protocol == IPPROTO_ICMP)
 	//{
