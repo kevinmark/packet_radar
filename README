@@ -10,6 +10,7 @@ This is a tool for watching the packet flow.
 
 ref:
 http://nano-chicken.blogspot.tw/2010/03/linux-modules12-netfilter.html
+http://read.pudn.com/downloads61/sourcecode/unix_linux/212404/test_ipv6.c__.htm
 
 
 debian6:
@@ -24,8 +25,12 @@ mips:
 	dmesg | less
 
 use:
-	insmod 001.ko
-	rmmod 001.ko
+	insmod  001.ko
+	rmmod  001.ko
+
+v6 -> v4+v6:
+	vi  hook5_2.6_*_v6.c
+	enable  "#define _IPV4_"
 
 
 ===============README EOF==================
