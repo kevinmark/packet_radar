@@ -1,4 +1,4 @@
-#define _IPV4_
+//#define _IPV4_
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -178,31 +178,31 @@ static struct nf_hook_ops brook_ops[] __read_mostly = {
 		.hook = prerouting6,
 		.pf = PF_INET6,
 		.hooknum = NF_IP6_PRE_ROUTING,
-		.priority = NF_IP6_PRI_RAW,
+		.priority = NF_IP6_PRI_FIRST,
 		.owner = THIS_MODULE,
 	}, {
 		.hook = localin6,
 		.pf = PF_INET6,
 		.hooknum = NF_IP6_LOCAL_IN,
-		.priority = NF_IP6_PRI_RAW,
+		.priority = NF_IP6_PRI_FIRST,
 		.owner = THIS_MODULE,
 	}, {
 		.hook = fwding6,
 		.pf = PF_INET6,
 		.hooknum = NF_IP6_FORWARD,
-		.priority = NF_IP6_PRI_RAW,
+		.priority = NF_IP6_PRI_FIRST,
 		.owner = THIS_MODULE,
 	}, {
 		.hook = localout6,
 		.pf = PF_INET6,
 		.hooknum = NF_IP6_LOCAL_OUT,
-		.priority = NF_IP6_PRI_RAW,
+		.priority = NF_IP6_PRI_FIRST,
 		.owner = THIS_MODULE,
 	}, {
 		.hook = postrouting6,
 		.pf = PF_INET6,
 		.hooknum = NF_IP6_POST_ROUTING,
-		.priority = NF_IP6_PRI_RAW,
+		.priority = NF_IP6_PRI_FIRST,
 		.owner = THIS_MODULE,
 	},
 

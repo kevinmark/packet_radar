@@ -9,3 +9,4 @@
 *.symvers
 *.swp
 .*.swp
+001.c
