@@ -80,13 +80,14 @@ fwding(unsigned int hook, struct sk_buff *skb,
 	return NF_ACCEPT;
 }
 #endif
-
 inline void dumpIp6Hdr(const char *fn, const struct sk_buff *skb)
 {
         const struct ipv6hdr *ipv6 = ipv6_hdr(skb);
         const struct tcphdr *tcp = tcp_hdr(skb);
 
         printk(KERN_ALERT "%s, saddr:%pI6:%hu, daddr:%pI6:%hu\n", fn, &ipv6->saddr, ntohs(tcp->source), &ipv6->daddr, ntohs(tcp->dest));
+        //printk(KERN_ALERT "%s, saddr:%pI6:%d, daddr:%pI6:%d\n", fn, &ipv6->saddr, ntohs(tcp->source), &ipv6->daddr, ntohs(tcp->dest));
+        //printk(KERN_ALERT "%s, saddr:%pI6:, daddr:%pI6:\n", fn, &ipv6->saddr,  &ipv6->daddr );
 
         if(!strcmp(fn, "postrouting6"))
         printk(KERN_ALERT "---------------------------------\n");
