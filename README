@@ -4,13 +4,14 @@
 Welcome !
 This is a private project
 
-This is a tool for watching the packet flow.
+This is a tool for watching/modifying the packet flow.
   When the packet go through the HOOK Point,
   this module will hand up and say "It passed me !!"
 
 ref:
 http://nano-chicken.blogspot.tw/2010/03/linux-modules12-netfilter.html
 http://read.pudn.com/downloads61/sourcecode/unix_linux/212404/test_ipv6.c__.htm
+http://phrack.org/issues/61/13.html
 
 
 debian6:
@@ -24,6 +25,11 @@ mips:
 		KERNEL_DIR=/path/to/tomatoraf/release/src-rt/linux/linux-2.6
 	dmesg | less
 
+64bit:
+	cp  tcpwinmax_3.2_0.c  001.c
+	ln -sf /usr/src/linux-headers-*-generic /lib/modules/*-generic/build
+	make
+
 use:
 	insmod  001.ko
 	rmmod  001.ko
@@ -31,6 +37,9 @@ use:
 v6 -> v4+v6:
 	vi  hook5_2.6_*_v6.c
 	enable  "#define _IPV4_"
+
+tcpwinmax_3.2_0.c:    (inetrcept packet, and modify its window size to MAX)
+	v1.5  scp download compatibility
 
 
 ===============README EOF==================
