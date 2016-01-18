@@ -9,6 +9,7 @@
  * v1.3  wget         compatibility
  * v1.4  scp upload   compatibility
  * v1.5  scp download compatibility
+ * v1.6  team viewer  compatibility
  *
  */
 #include <linux/init.h>
@@ -34,8 +35,8 @@ inline unsigned int modifyIpHdr(const char *fn, struct sk_buff *skb)
 	int tcplen;
 	static int tcpwin_old=0;
 
-
 	//(1) list the origin content of skb
+	//printk(KERN_ALERT "---------------------------------\n");
 	//printk(KERN_ALERT "%s, saddr:%pI4:%hu, daddr:%pI4:%hu\n", fn, &iph->saddr, ntohs(tcph->source), &iph->daddr, ntohs(tcph->dest));
 
 	//(2) filter 'ACK' package
@@ -52,32 +53,35 @@ inline unsigned int modifyIpHdr(const char *fn, struct sk_buff *skb)
 	if (tcph->syn || tcph->fin )
 		return NF_ACCEPT;
 
-	//(2b) skip https service (443)
-
-	//(2c) skip continuous data-transfer
+	//(2b) ACK packet to request data usually have less than 33 tcp length
 	//printk(KERN_ALERT "[tcp_win]:%d\n", ntohs(tcph->window));
 	//printk(KERN_ALERT "[tcp_win_old]:%d\n", tcpwin_old);
-	if( tcpwin_old <= ntohs(tcph->window) )
+	tcplen = (skb->len - (iph->ihl << 2));
+	//printk(KERN_ALERT "[tcp_len]:%d\n", tcplen);
+	//printk(KERN_ALERT "[skb_len]:%d\n", skb->len);
+	if( tcplen > 33 || tcph->window == 0 )
+		return NF_ACCEPT;
+
+	//(2c) if the win size of request packet is less than previous one, 
+	//       skip this modifying !
+	//     it means this packet is the final one of a fragmented packet
+	//       or flow control make this frangmented packet size lower
+	if( tcpwin_old >= ntohs(tcph->window) )
 	{
 		tcpwin_old= ntohs(tcph->window);
 		return NF_ACCEPT;
 	}
 	tcpwin_old= ntohs(tcph->window);
 
-	//(2d) small(cnotrol) packets doesn't need to be modified
-	//printk(KERN_ALERT "[tcp_win]:%d\n", ntohs(tcph->window));
-	//tcplen = (skb->len - (iph->ihl << 2));
-	//printk(KERN_ALERT "[tcp_len]:%d\n", tcplen);
-	//printk(KERN_ALERT "[skb_len]:%d\n", skb->len);
-	//if( ntohs(tcph->window) < 10240 )
-	//	return NF_ACCEPT;
-
 	//(3) modify package
 	// http://stackoverflow.com/questions/8237983/packet-processing-in-netfilter-hooks
 	//printk(KERN_ALERT "[advertise win_old]:%hu\n", ntohs(tcph->window));
 	//printk(KERN_ALERT "[tcp_win]:edit 0x??ff\n");
-	tcph->window = htons(0xffff);
-	//tcph->window = htons(0x8fff);
+	//tcph->window = htons(0xffff);
+	// new_win always is the 3/4 of recv_buff
+	// http://notes.yuwh.net/linux-protocol-stack-8-tcp_select_window/
+	// 2048:upgrade the win size of the initial packet (default slow start)
+	tcph->window = tcph->window+ htons((tcph->window>>2)+2048);
 	//printk(KERN_ALERT "[advertise win_new]:%hu\n", ntohs(tcph->window));
 
 	//(4) calculate new checksum

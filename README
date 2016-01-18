@@ -39,7 +39,7 @@ v6 -> v4+v6:
 	enable  "#define _IPV4_"
 
 tcpwinmax_3.2_0.c:    (inetrcept packet, and modify its window size to MAX)
-	v1.5  scp download compatibility
+	v1.6  team viewer  compatibility
 
 
 ===============README EOF==================
